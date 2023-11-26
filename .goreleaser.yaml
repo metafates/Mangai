@@ -166,7 +166,7 @@ nfpms:
       - deb
       - rpm
 
-    bindir: /usr/local/bin
+    bindir: /usr/bin
     section: utils
 
     deb:
