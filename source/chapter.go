@@ -140,20 +140,22 @@ func (c *Chapter) IsDownloaded() bool {
 		return c.isDownloaded.MustGet()
 	}
 
-	path, _ := c.path(c.Manga.peekPath(), false)
+	path, _ := c.path(c.Manga.peekPath())
 	exists, _ := filesystem.Api().Exists(path)
 	c.isDownloaded = mo.Some(exists)
 	return exists
 }
 
-func (c *Chapter) path(relativeTo string, createVolumeDir bool) (path string, err error) {
-	if createVolumeDir {
-		path = filepath.Join(path, util.SanitizeFilename(c.Volume))
+func (c *Chapter) path(relativeTo string) (path string, err error) {
+	if c.Volume != "" && viper.GetBool(key.DownloaderCreateVolumeDir) {
+		path = filepath.Join(relativeTo, util.SanitizeFilename(c.Volume))
 		err = filesystem.Api().MkdirAll(path, os.ModePerm)
 		if err != nil {
 			return
 		}
-	}
+		path = filepath.Join(path, c.Filename())
+		return
+    }
 
 	path = filepath.Join(relativeTo, c.Filename())
 	return
@@ -166,7 +168,7 @@ func (c *Chapter) Path(temp bool) (path string, err error) {
 		return
 	}
 
-	return c.path(manga, c.Volume != "" && viper.GetBool(key.DownloaderCreateVolumeDir))
+	return c.path(manga)
 }
 
 func (c *Chapter) Source() Source {
