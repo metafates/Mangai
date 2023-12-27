@@ -6,6 +6,7 @@ import (
 	"github.com/metafates/mangal/key"
 	"github.com/samber/lo"
 	"github.com/spf13/viper"
+	"log"
 	"os"
 	"path/filepath"
 )
@@ -15,7 +16,9 @@ const EnvConfigPath = "MANGAL_CONFIG_PATH"
 // mkdir creates a directory and all parent directories if they don't exist
 // will return the path of the directory
 func mkdir(path string) string {
-	lo.Must0(filesystem.Api().MkdirAll(path, os.ModePerm))
+	if filesystem.Api().MkdirAll(path, os.ModePerm) != nil {
+		log.Fatalf("Error: could not create directory %s", path)
+	}
 	return path
 }
 
