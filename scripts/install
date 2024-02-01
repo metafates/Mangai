@@ -180,7 +180,7 @@ install_rpm() {
     esac
 
     RPM_NAME="${FILE_BASENAME}-${VERSION}.${ARCH}.rpm"
-    RPM_FILE="$TMPDIR/$DEB_NAME"
+    RPM_FILE="$TMPDIR/$RPM_NAME"
 
     export RPM_FILE RPM_NAME
 
@@ -188,7 +188,7 @@ install_rpm() {
         cd "$TMPDIR"
 
         info "Downloading $RPM_NAME"
-        download "$DEB_FILE" "$RELEASES_URL/download/$TAG/$RPM_NAME"
+        download "$RPM_FILE" "$RELEASES_URL/download/$TAG/$RPM_NAME"
 
         info "Downloading checksums"
         download "checksums.txt" "$RELEASES_URL/download/$TAG/checksums.txt"
