@@ -34,7 +34,7 @@ func (m *Mangadex) Search(query string) ([]*source.Manga, error) {
 		params.Add("contentRating[]", mangodex.Erotica)
 	}
 
-	params.Set("order[followedCount]", "desc")
+	params.Set("order[relevance]", "desc")
 	params.Set("title", query)
 
 	mangaList, err := m.client.Manga.GetMangaList(params)
