@@ -284,7 +284,7 @@ It should automatically appear in the list of available scrapers.
 Mangal also supports integration with anilist.
 
 Besides fetching metadata for each manga when downloading,
-mangal can also mark chapters as read on your Anilsit profile when you read them inside mangal.
+mangal can also mark chapters as read on your Anilist profile when you read them inside mangal.
 
 For more information see [wiki](https://github.com/metafates/mangal/wiki/Anilist-Integration)
 
