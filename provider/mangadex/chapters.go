@@ -86,10 +86,6 @@ func (m *Mangadex) ChaptersOf(manga *source.Manga) ([]*source.Chapter, error) {
 		if currOffset >= list.Total {
 			break
 		}
-
-		if currOffset >= list.Total {
-			break
-		}
 	}
 
 	slices.SortFunc(chapters, func(a, b *source.Chapter) bool {
