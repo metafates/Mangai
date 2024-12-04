@@ -2,11 +2,13 @@ package manganato
 
 import (
 	"fmt"
-	"github.com/PuerkitoBio/goquery"
-	"github.com/metafates/mangal/provider/generic"
 	"net/url"
+	"regexp"
 	"strings"
 	"time"
+
+	"github.com/PuerkitoBio/goquery"
+	"github.com/metafates/mangal/provider/generic"
 )
 
 var Config = &generic.Configuration{
@@ -16,12 +18,29 @@ var Config = &generic.Configuration{
 	ReverseChapters: true,
 	BaseURL:         "https://manganato.com/",
 	GenerateSearchURL: func(query string) string {
-		query = strings.ReplaceAll(query, " ", "_")
-		query = strings.TrimSpace(query)
 		query = strings.ToLower(query)
+
+		replacements := map[string]string{
+			`[àáạảãâầấậẩẫăằắặẳẵ]`: "a",
+			`[èéẹẻẽêềếệểễ]`:       "e",
+			`[ìíịỉĩ]`:             "i",
+			`[òóọỏõôồốộổỗơờớợởỡ]`: "o",
+			`[ùúụủũưừứựửữ]`:       "u",
+			`[ỳýỵỷỹ]`:             "y",
+			`[đ]`:                 "d",
+		}
+
+		for pattern, replacement := range replacements {
+			query = regexp.MustCompile(pattern).ReplaceAllString(query, replacement)
+		}
+
+		query = strings.ReplaceAll(query, " ", "_")
+		query = regexp.MustCompile(`[^0-9a-z_]`).ReplaceAllString(query, "_")
+		query = regexp.MustCompile(`_+`).ReplaceAllString(query, "_")
+		query = strings.Trim(query, "_")
 		query = url.QueryEscape(query)
-		template := "https://chapmanganato.com/https://manganato.com/search/story/%s"
-		return fmt.Sprintf(template, query)
+
+		return fmt.Sprintf("https://manganato.com/search/story/%s", query)
 	},
 	MangaExtractor: &generic.Extractor{
 		Selector: "div.search-story-item",
